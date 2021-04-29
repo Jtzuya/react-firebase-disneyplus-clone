@@ -1,0 +1,250 @@
+import styled from 'styled-components';
+
+/* used to pull the data from firebase */
+import { useEffect, useState } from 'react';    
+import { useParams } from 'react-router-dom';   /* useful for writing url of each movie dynamically */
+import db from '../firebase';                   /* access to our database where we will get those data we're pulling */
+/* end of pull request */
+
+const Detail = (props) => {
+
+
+    /*  */
+    const { id } => useParams();
+    
+    /* creating a variable using useState and start the state with an Empty Object {}*/
+    const { detailData, setDetailData } = useState({});
+    /* detailData is the variable and setDetailData is the function that changes the variable */
+
+
+    /* setting the useEffect hook */
+    useEffect(() => { /* making sure that () get updated based on whenever our [id] at the bottom changes, 
+                        the id changes whenever a user clicks a video to another video */
+
+ ex1       /* by targeting our db from firebase.js with an empty function, we get the object 'db' and in that db as we can see in our   firebase.js, I have the access of it in the firebase firestore > Collection and in that collection we have a movies folder which now we pass it here ('movies') and in that movies folder we have a document we get the id > then in that document we have another document that has our data init then we created an if statement which says "if inside that doc, we got a data that exists > we return setDataDetail where its now changed as we grab the data from that document*/
+
+ex2        Every time this component renders try to select document by id from movies collection and if document exists update local state, else print no such document.
+        But setDetailData will make the component to re-render, so You successfully cycled your component
+
+        db.collection('movies').doc(id.get().then((doc) => {
+                if (doc.exists) {
+                    setDetailData(doc.data());
+                } else {
+                    console.log('no such document in firebase');
+                }
+
+                /* if it catches an error, lets read that error out */
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            })
+        );
+    }, [id]);
+
+    /* simply speaking - its calling a movies collection,m checking if there are documents returned and setting them into a hook called setDefaultData, else console logging */
+
+
+
+
+    return ( 
+        <Container>
+           <Background>
+               <img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/2A509165105A09F9F533E2008B143BCF38D6A5859D0EBB40CCA388772005CD94/scale?width=1440&aspectRatio=1.78&format=jpeg"/>
+           </Background>
+
+           <ImageTitle>
+               <img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/DD8BBA864E290FBC03A244A488FFC8DC8365FBF2F95A122B1D57BF3772D717FD/scale?width=1440&aspectRatio=1.78" />
+           </ImageTitle>
+
+           <ContentMeta>
+              <Controls>
+                  <Player>
+                      <img src="./images/play-icon-black.png" alt=""/>
+                      <span>Play</span>
+                  </Player>
+
+                  <Trailer>
+                      <img src="./images/play-icon-white.png" alt=""/>
+                      <span>Trailer</span>
+                  </Trailer>
+
+                  <AddList>
+                      <span />
+                      <span />
+                  </AddList>
+
+                  <GroupWatch>
+                      <div>
+                          <img src="./images/group-icon.png" alt=""/>
+                      </div>
+                  </GroupWatch>
+              </Controls>
+
+              <SubTitle>
+                  Subtitle
+              </SubTitle>
+
+              <Description>
+                  Description
+              </Description>
+           </ContentMeta>
+        </Container>
+     );
+}
+
+const Container = styled.div`
+    position: relative;
+    min-height: calc(100vh - 250px);
+    overflow-x: hidden;
+    display: block;
+    top: 72px;
+    padding: 0 calc(3.5vw + 5px);
+`;
+
+const Background = styled.div`
+    left: 0;
+    opacity: 0.7;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: -1;
+
+    img {
+        width: 100vw;
+        height: 100vh;
+        
+        @media (max-width: 768px) {
+            width: initial;
+        }
+    }
+
+`;    
+
+const ImageTitle = styled.div`
+    display: flex;
+    align-items: flex-end;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    margin: 0 auto;
+    height: 30vw;
+    min-height: 170px;
+    padding-bottom: 24px;
+    width: 100%;
+
+    img {
+        max-width: 600px;
+        min-width: 200px;
+        width: 35vw;
+    }
+`;
+
+const ContentMeta = styled.div`
+    max-width: 874px;
+`;
+
+const Controls = styled.div`
+    display: flex;
+    align-items: center;
+    flex-flow: row nowrap;
+    margin: 24px 0;
+    min-height: 56px;
+`;
+ 
+const Player = styled.button`
+    display: flex;
+    font-size: 15px;
+    margin: 0 22px 0 0;
+    padding: 0 24px;
+    height: 56px;
+    border-radius: 4px;
+    border: none;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    letter-spacing: 0.1px;
+    text-align: center;
+    text-transform: uppercase;
+    background: rgb(249, 249, 249);
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.8);
+    transition: all 0.3s ease;
+
+    img {
+        width: 32px;
+    }
+
+    &:hover {
+        background-color: rgba(249, 249, 249, 0.8);
+    }
+
+    @media (max-width: 768px) {
+        height: 45px;
+        padding: 12px;
+        margin-right: 10px;
+
+        img {
+            width: 25px;
+        }
+    }
+`;
+
+const Trailer = styled(Player)`
+    border: 1px solid rgba(249, 249, 249, 0.8);
+    color: rgba(249, 249, 249, 0.8);
+    background: rgba(0, 0, 0, 0.4);
+`;
+
+const AddList = styled.div`
+    margin-right: 16px;
+    height: 44px;
+    width: 44px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+
+    span {                  /* creates the + icon */
+        background-color: rgba(249, 249, 249, 0.9);
+        display: inline-block;
+
+        &:first-child {     /* creates the line horizontal line */
+            height: 2px;
+            transform: translate(1px, 0px) rotate(0deg);
+            width: 16px;
+        }
+
+        &:nth-child(2) {   /* create the vertical line */
+            height: 16px;
+            transform: translate(-8px) rotate(0deg);
+            width: 2px
+        }
+    }
+`;
+
+const GroupWatch = styled(AddList)`
+    height: 44px;
+`;
+
+const SubTitle = styled.div`
+    color: rgba(249, 249, 249, 0.8);
+    font-size: 15px;
+    min-height: 20px;
+
+    @media(max-width: 768) {
+        font-size: 12px;
+    }
+`;
+
+const Description = styled.div`
+    line-height: 1.4;
+    font-size: 20px;
+    padding: 16px 0;
+    color: rgba(249, 249, 249, 0.9);
+
+    @media(max-width: 768px) {
+        font-size: 14px;
+    }
+`;
+export default Detail;
